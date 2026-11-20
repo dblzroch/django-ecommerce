@@ -4,13 +4,29 @@
 
 {% block content %}
 <h2>Checkout</h2>
-<form method="post">
+
+<p><strong>Total:</strong> ${{ total }}</p>
+
+{% if coupon %}
+<div class="alert alert-success">
+    Applied coupon: <strong>{{ coupon.code }}</strong> ({{ coupon.discount_percent }}% off)
+</div>
+{% endif %}
+
+<form method="post" action="{% url 'store:checkout' %}">
     {% csrf_token %}
-    <div class="mb-3">
-        <label class="form-label">Coupon code</label>
-        <input type="text" name="coupon_code" class="form-control" placeholder="Enter coupon">
-    </div>
     <button type="submit" class="btn btn-primary">Place Order</button>
     <a href="{% url 'store:cart_view' %}" class="btn btn-secondary">Back to cart</a>
+</form>
+
+<hr>
+
+<h3>Apply Coupon</h3>
+<form method="post" action="{% url 'store:apply_coupon' %}">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="text" name="coupon_code" class="form-control" placeholder="Enter coupon code">
+        <button type="submit" class="btn btn-success">Apply</button>
+    </div>
 </form>
 {% endblock %}
